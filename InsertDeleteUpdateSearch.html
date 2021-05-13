@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+
+<body>
+
+    <h2>Text input fields</h2>
+    <div id="demo">
+
+    </div>
+    
+
+    <form>
+        <label for="fname">Name:</label><br>
+        <input type="text" id="fname" name="fname" value=""><br>
+        <label for="RollNumber">Roll Number:</label><br>
+        <input type="text" id="RollNumber" name="RollNumber" value=""><br>
+        <label for="Age">Age:</label><br>
+        <input type="text" id="Age" name="Age" value=""><br>
+        <label for="Gender">Gender:</label><br>
+        <input type="text" id="Gender" name="Gender" value=""><br>
+        <button type="button" onclick="submitRecord()">Submit</button>
+        <button type="button" onclick="updateRecord()">Update</button>
+        <button type="button" onclick="SearchRecord()">Search</button>
+        <button type="button" onclick="DeleteRecord()">Delete</button>
+    </form>
+    <script>
+        function submitRecord()
+        {
+            var name = document.getElementById("fname").value;
+            var RollNumber = document.getElementById("RollNumber").value;
+            var Age = document.getElementById("Age").value;
+            var Gender = document.getElementById("Gender").value;
+            var studentRecord = {"Name":name, "RollNumber":RollNumber, "Age":Age, "Gender":Gender}
+            if (typeof (Storage) !== "undefined")
+            {
+                // Store
+                localStorage.setItem(name, JSON.stringify(studentRecord));
+                // Retrieve
+                //document.getElementById("demo").innerHTML = localStorage.getItem(name);
+            } else {
+                document.getElementById("demo").innerHTML = "Sorry, your browser does not support Web Storage...";
+            }
+            clearForm();
+        }
+
+        function clearForm()
+        {
+            document.getElementById("fname").value = '';
+            document.getElementById("RollNumber").value = '';
+            document.getElementById("Age").value = '';
+            document.getElementById("Gender").value = '';
+        }
+
+        function updateRecord()
+        {
+            var name = document.getElementById("fname").value;
+            var newRollNumber = document.getElementById("RollNumber").value;
+            var newAge = document.getElementById("Age").value;
+            var newGender = document.getElementById("Gender").value;
+
+            var retrievedStudRec = JSON.parse(localStorage.getItem(name));
+
+            if (retrievedStudRec == null)
+            {
+                alert("There is no record with the given name");
+            }
+            else
+            {
+                if(!RollNumber)
+                {
+                    retrievedStudRec.RollNumber = newRollNumber;
+                }
+                if(!Age)
+                {
+                    retrievedStudRec.Age = newAge;
+                }
+                if(!Gender)
+                {
+                    retrievedStudRec.Gender = newGender;
+                }
+
+                localStorage.setItem(name, JSON.stringify(retrievedStudRec))
+                alert("Record updated!");
+                clearForm();
+            }
+        }
+        function SearchRecord()
+        {
+            var studentName = prompt("Please enter the student name");
+            var retrievedStudRec = JSON.parse(localStorage.getItem(studentName));
+
+            if (retrievedStudRec == null)
+            {
+                alert("There is no record with the given name");
+            }
+            else
+            {
+                document.getElementById("fname").value = retrievedStudRec.Name;
+                document.getElementById("RollNumber").value = retrievedStudRec.RollNumber;
+                document.getElementById("Age").value = retrievedStudRec.Age;
+                document.getElementById("Gender").value = retrievedStudRec.Gender;
+            }
+        }
+        function DeleteRecord()
+        {
+            var studentName = prompt("Please enter the student name");
+            var retrievedStudRec = JSON.parse(localStorage.getItem(studentName));
+
+            if (retrievedStudRec == null)
+            {
+                alert("There is no record with the given name");
+            }
+            else
+            {
+                localStorage.removeItem(studentName);
+            }
+        }
+    </script>
+
+</body>
+
+</html>
